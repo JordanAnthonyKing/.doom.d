@@ -17,8 +17,13 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "Source Han Code JP" :size 13 :weight 'normal))
-;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
+;; BUG: There is something wrong with how Doom handles JP characters. Enabling the
+;; `unicode' module doesn't help. For now setting both `doom-font' and `doom-unicode-font'
+;; to the same font seems to do the trick but font-resizing for unicode chars is broken.
+;; Enabling `unicode' prevents the unicode font specified from even being used
+(setq doom-font (font-spec :family "M+ 2m" :size 16 :weight 'regular))
+(setq doom-unicode-font (font-spec :family "M+ 2m" :size 16 :weight 'regular))
+;;(setq doom-font (font-spec :family "Source Han Code JP" :size 13 :weight 'normal))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -32,7 +37,7 @@
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
-:
+
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
@@ -54,7 +59,6 @@
   (map! :leader
         :desc "M-x" "SPC" #'execute-extended-command)
 
-  ;; TODO: Doesn't seem to do anything
   ;; Just experimenting for now
   (scroll-on-jump-advice-add evil-undo)
   (scroll-on-jump-advice-add evil-redo)
@@ -64,7 +68,6 @@
   (scroll-on-jump-advice-add evil-forward-paragraph)
   (scroll-on-jump-advice-add evil-backward-paragraph)
   (scroll-on-jump-advice-add evil-goto-first-line)
-
   ;; Actions that themselves scroll.
   (scroll-on-jump-advice-add better-jumper-jump-forward)
   (scroll-on-jump-advice-add better-jumper-jump-backward)
@@ -74,11 +77,11 @@
   (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-center)
   (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-top)
   (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-bottom))
-;; (global-set-key [remap evil-jump-forward]  #'better-jumper-jump-forward)
 
+(after! ddskk
+  (map! "C-x C-j" #'skk-mode))
 
-(map! "C-x C-j" #'skk-mode)
-
+;; For when lsp-mode fixes imenu support for typescript
 (defun my/filter-items (orig-fun item)
   (or (funcall orig-fun item)
       (eq (gethash "kind" item) 13)
@@ -98,18 +101,18 @@
 
 (after! lsp-mode
   (setq lsp-auto-execute-action nil
-                                        ; lsp-enable-imenu 1
-                                        ; lsp-imenu-index-symbol-kinds '(Method Property Field Constructor Enum Interface Event Struct)
-                                        ; lsp-imenu-index-symbol-kinds '(Miscellaneous)
+        ; lsp-enable-imenu 1
+        ; lsp-imenu-index-symbol-kinds '(Method Property Field Constructor Enum Interface Event Struct)
+        ; lsp-imenu-index-symbol-kinds '(Miscellaneous)
         lsp-clients-typescript-log-verbosity "debug"
-                                        ; Could be great for csharp
-                                        ; lsp-headerline-breadcrumb-enable 1
-                                        ; lsp-headerline-breadcrumb-segments '(project file symbols)
+        ; Could be great for csharp
+        ; lsp-headerline-breadcrumb-enable 1
+        ; lsp-headerline-breadcrumb-segments '(project file symbols)
         lsp-clients-typescript-plugins
         (vector
-         (list :name "typescript-tslint-plugin"
-               :location "/usr/lib/node_modules/typescript-tslint-plugin/"))))
-;; :location "~/.emacs.d/.local/npm/node_modules/typescript-tslint-plugin/"))))
+          (list :name "typescript-tslint-plugin"
+                ; :location "~/.emacs.d/.local/npm/node_modules/typescript-tslint-plugin/"))))
+                :location "/usr/lib/node_modules/typescript-tslint-plugin/"))))
 
 (after! lsp-ui
   (setq lsp-ui-sideline-show-code-actions nil
@@ -134,6 +137,9 @@
 
 (add-hook! treemacs-mode
   (treemacs-load-theme "doom-colors"))
+
+(after! highlight-indent-guides
+  (setq highlight-indent-guides-character 124))
 
 ;; TODO: Automatically open company on . if not already
 (after! company

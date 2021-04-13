@@ -14,9 +14,6 @@
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
-;; Debugging ddskk
-(setq debug-on-error t)
-
 ;; NOTE Hack
 (use-package-hook! ivy-rich
   :pre-config
