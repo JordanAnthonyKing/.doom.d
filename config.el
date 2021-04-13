@@ -78,7 +78,7 @@
   (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-top)
   (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-bottom))
 
-(after! ddskk
+(after! japanese
   (map! "C-x C-j" #'skk-mode))
 
 ;; For when lsp-mode fixes imenu support for typescript
@@ -110,9 +110,9 @@
         ; lsp-headerline-breadcrumb-segments '(project file symbols)
         lsp-clients-typescript-plugins
         (vector
-          (list :name "typescript-tslint-plugin"
-                ; :location "~/.emacs.d/.local/npm/node_modules/typescript-tslint-plugin/"))))
-                :location "/usr/lib/node_modules/typescript-tslint-plugin/"))))
+         (list :name "typescript-tslint-plugin"
+               ; :location "~/.emacs.d/.local/npm/node_modules/typescript-tslint-plugin/"))))
+               :location "/usr/lib/node_modules/typescript-tslint-plugin/"))))
 
 (after! lsp-ui
   (setq lsp-ui-sideline-show-code-actions nil
@@ -121,11 +121,12 @@
         lsp-ui-sideline-diagnostic-max-line-length 75))
 
 (after! doom-modeline
-  (setq doom-modeline-bar-width 2
-        doom-modeline-buffer-file-name-style 'buffer-name
-        doom-modeline-indent-info nil
+  (setq doom-modeline-bar-width 3
+        ; doom-modeline-buffer-file-name-style 'buffer-name
+        doom-modeline-buffer-file-name-style 'file-name
         doom-modeline-buffer-encoding nil
-        doom-modeline-vcs-max-length 20
+        doom-modeline-vcs-max-length 18
+        doom-modeline-persp-icon nil
         doom-modeline-buffer-modification-icon nil))
 
 (after! treemacs
@@ -160,4 +161,12 @@
 (add-hook! +doom-dashboard-mode
   (setq +doom-dashboard-banner-padding '(0 . 2)))
 
-;; (good-scroll-mode 1)
+; (good-scroll-mode 1)
+
+(after! org
+  ;; Workaround for not being able to use `RET' in `org-mode'
+  (add-hook 'org-mode-hook (lambda () (electric-indent-local-mode -1)))
+  (setq org-startup-indent 0
+        org-startup-folded t)
+  (add-hook! org-mode ((company-mode 0)
+                       (flycheck-mode 0))))
