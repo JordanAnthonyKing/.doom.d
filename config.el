@@ -21,9 +21,11 @@
 ;; `unicode' module doesn't help. For now setting both `doom-font' and `doom-unicode-font'
 ;; to the same font seems to do the trick but font-resizing for unicode chars is broken.
 ;; Enabling `unicode' prevents the unicode font specified from even being used
-(setq doom-font (font-spec :family "M+ 2m" :size 16 :weight 'regular))
-(setq doom-unicode-font (font-spec :family "M+ 2m" :size 16 :weight 'regular))
-;;(setq doom-font (font-spec :family "Source Han Code JP" :size 13 :weight 'normal))
+(setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
+(setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
+; (setq doom-font (font-spec :family "M+ 2m" :size 16 :weight 'regular))
+; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 16 :weight 'regular))
+; (setq doom-font (font-spec :family "Source Han Code JP" :size 13 :weight 'normal))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
