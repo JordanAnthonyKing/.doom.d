@@ -55,31 +55,38 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+(use-package! scroll-on-jump
+  :config
+  (setq scroll-on-jump-duration 0.3))
+
 (after! evil
   (map! :leader
         :desc "M-x" "SPC" #'execute-extended-command)
 
   ;; Just experimenting for now
-  (scroll-on-jump-advice-add evil-undo)
-  (scroll-on-jump-advice-add evil-redo)
   (scroll-on-jump-advice-add evil-jump-item)
-  (scroll-on-jump-advice-add evil-ex-search-next)
   (scroll-on-jump-advice-add evil-ex-search-previous)
   (scroll-on-jump-advice-add evil-forward-paragraph)
   (scroll-on-jump-advice-add evil-backward-paragraph)
-  (scroll-on-jump-advice-add evil-goto-first-line)
+  ; (scroll-on-jump-advice-add evil-goto-first-line)
   ;; Actions that themselves scroll.
   (scroll-on-jump-advice-add better-jumper-jump-forward)
   (scroll-on-jump-advice-add better-jumper-jump-backward)
-  (scroll-on-jump-with-scroll-advice-add evil-goto-line)
+  ; (scroll-on-jump-with-scroll-advice-add evil-goto-line)
   (scroll-on-jump-with-scroll-advice-add evil-scroll-down)
-  (scroll-on-jump-with-scroll-advice-add evil-scroll-up)
-  (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-center)
-  (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-top)
-  (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-bottom))
+  ; (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-center)
+  ; (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-top)
+  ; (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-bottom)
+  (scroll-on-jump-with-scroll-advice-add evil-scroll-up))
+
+(after! undo-fu
+  (scroll-on-jump-advice-add undo-fu-only-undo)
+  (scroll-on-jump-advice-add undo-fu-only-redo))
 
 (after! japanese
-  (map! "C-x C-j" #'skk-mode))
+  (map! "C-x C-j" #'skk-mode)
+  (setq skk-large-jisyo "~/.local/share/skk/SKK-JISYO.L"
+        skk-record-file "~/.local/share/skk/SKK-RECORD"))
 
 ;; For when lsp-mode fixes imenu support for typescript
 (defun my/filter-items (orig-fun item)
