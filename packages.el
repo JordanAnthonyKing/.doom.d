@@ -57,8 +57,6 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-
-
 ;TODO: Temporary as the currently used package by doom has a bug and I don't
 ; know which files I actually need
-(package! ddskk :recipe (:host github :repo "skk-dev/ddskk" :files ("*")))
+; (package! ddskk :recipe (:host github :repo "skk-dev/ddskk" :files ("*")))

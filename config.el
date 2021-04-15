@@ -172,10 +172,10 @@
 
 ; (good-scroll-mode 1)
 
-; (after! org
-  ; ;; Workaround for not being able to use `RET' in `org-mode'
-  ; (add-hook org-mode-hook (lambda () (electric-indent-local-mode -1)))
-  ; (setq org-startup-indent 0
-        ; org-startup-folded t)
-  ; (add-hook! org-mode ((company-mode 0)
-                       ; (flycheck-mode 0))))
+(after! org
+  ;; Workaround for not being able to use `RET' in `org-mode'
+  (add-hook org-mode-hook (lambda () (electric-indent-local-mode -1)))
+  (setq org-startup-indent 0
+        org-startup-folded t)
+  (add-hook! org-mode ((company-mode 0)
+                       (flycheck-mode 0))))
