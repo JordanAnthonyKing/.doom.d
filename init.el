@@ -90,7 +90,7 @@
        vc                  ; version-control and Emacs, sitting in a tree
 
        :term
-       eshell              ; the elisp shell that works everywhere
+       ;eshell              ; the elisp shell that works everywhere
        ;;shell             ; simple shell REPL for Emacs
        ;;term              ; basic terminal emulator for Emacs
        ;;vterm             ; the best terminal emulation in Emacs
@@ -112,7 +112,7 @@
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
        lsp
-       magit               ; a git porcelain for Emacs
+       ;magit              ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
        ;;pdf               ; pdf enhancements
@@ -134,8 +134,8 @@
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
-       (csharp
-        +lsp +dotnet)              ; unity, .NET, and mono shenanigans
+       ;(csharp
+       ; +lsp +dotnet)              ; unity, .NET, and mono shenanigans
        data                ; config/data formats
        ;;(dart +flutter)   ; paint ui and not much else
        ;;elixir            ; erlang done right

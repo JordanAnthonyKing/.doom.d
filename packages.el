@@ -60,3 +60,4 @@
 ;TODO: Temporary as the currently used package by doom has a bug and I don't
 ; know which files I actually need
 ; (package! ddskk :recipe (:host github :repo "skk-dev/ddskk" :files ("*")))
+; (package! ddskk :pin "6ed518435be2d8c6fe3cfb421f046c0f084dde9e")
