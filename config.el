@@ -23,6 +23,7 @@
 ;; Enabling `unicode' prevents the unicode font specified from even being used
 (setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
 (setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
+(setq doom-variable-pitch-font (font-spec :family "M+ 2c" :size 30 :weight 'light))
 ; (setq doom-font (font-spec :family "M+ 2m" :size 16 :weight 'regular))
 ; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 16 :weight 'regular))
 ; (setq doom-font (font-spec :family "Source Han Code JP" :size 13 :weight 'normal))
@@ -86,6 +87,7 @@
   (scroll-on-jump-advice-add undo-fu-only-undo)
   (scroll-on-jump-advice-add undo-fu-only-redo))
 
+;; TODO: Find the record file
 (after! japanese
   (map! "C-x C-j" #'skk-mode)
   (setq skk-large-jisyo "~/.local/share/skk/SKK-JISYO.L"
@@ -114,15 +116,17 @@
         ; lsp-enable-imenu 1
         ; lsp-imenu-index-symbol-kinds '(Method Property Field Constructor Enum Interface Event Struct)
         ; lsp-imenu-index-symbol-kinds '(Miscellaneous)
-        lsp-clients-typescript-log-verbosity "debug"
         ; Could be great for csharp
         ; lsp-headerline-breadcrumb-enable 1
         ; lsp-headerline-breadcrumb-segments '(project file symbols)
-        lsp-clients-typescript-plugins
-        (vector
-         (list :name "typescript-tslint-plugin"
-               ; :location "~/.emacs.d/.local/npm/node_modules/typescript-tslint-plugin/"))))
-               :location "/usr/lib/node_modules/typescript-tslint-plugin/"))))
+        ; lsp-clients-typescript-tls-path "~/.local/share/npm/bin/typescript-language-server"
+        lsp-clients-typescript-log-verbosity "debug"
+        ; I may remove this entirely as it seems the functionality has recently been gutted
+        lsp-clients-typescript-plugins (vector
+                                        (list :name "typescript-tslint-plugin"))))
+                                            ; :location "/node_modules/typescript-tslint-plugin/"))))
+                                            ; :location "/home/jordan/.local/share/npm/lib/node_modules/typescript-tslint-plugin/"))))
+                                            ; :location "~/.emacs.d/.local/npm/node_modules/typescript-tslint-plugin/"))))
 
 (after! lsp-ui
   (setq lsp-ui-sideline-show-code-actions nil
@@ -142,15 +146,16 @@
 (after! treemacs
   (setq treemacs-width 50
         treemacs-recenter-distance 0.05
+        treemacs--icon-size 24
         treemacs-recenter-after-file-follow 'on-distance)
-  (treemacs-follow-mode 1)
-  (treemacs-fringe-indicator-mode 1))
+  (treemacs-follow-mode 1))
 
 (add-hook! treemacs-mode
-  (treemacs-load-theme "doom-colors"))
+  (treemacs-load-theme "doom-atom"))
 
 (after! highlight-indent-guides
-  (setq highlight-indent-guides-character 124))
+  (setq highlight-indent-guides-character 124
+        highlight-indent-guides-responsive 'top))
 
 ;; TODO: Make this purely idle-delay based instead
 (after! flycheck
@@ -171,8 +176,7 @@
 ; (good-scroll-mode 1)
 
 (after! company
-  (map! :i
-   (global-set-key "\t" 'company-complete-common))
+  (map! :desc "Complete common" :i "." #'company-complete-common)
   (setq company-minimum-prefix-length 2
         company-global-modes '(not erc-mode message-mode help-mode gud-mode org-mode)))
 
