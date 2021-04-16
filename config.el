@@ -65,6 +65,7 @@
   (map! :leader
         :desc "M-x" "SPC" #'execute-extended-command)
 
+  ;; TODO: Only about half of these work
   ;; Just experimenting for now
   (scroll-on-jump-advice-add evil-jump-item)
   (scroll-on-jump-advice-add evil-ex-search-previous)
@@ -151,14 +152,11 @@
 (after! highlight-indent-guides
   (setq highlight-indent-guides-character 124))
 
-;; TODO: Automatically open company on . if not already
-(after! company
-  (setq company-minimum-prefix-length 1))
-
 ;; TODO: Make this purely idle-delay based instead
 (after! flycheck
-  (setq flycheck-check-syntax-automatically
-        '(save mode-enabled idle-buffer-switch new-line))
+  ; (setq flycheck-check-syntax-automatically
+        ; '(save mode-enabled idle-buffer-switch new-line))
+  (setq flycheck-global-modes '(not org-mode))
   (map! :leader
         (:prefix-map ("c" . "code")
          :desc "Next error"     "n" #'flycheck-next-error
@@ -168,14 +166,19 @@
 (setq fancy-splash-image "~/.doom.d/doog2.png")
 
 (add-hook! +doom-dashboard-mode
-  (setq +doom-dashboard-banner-padding '(0 . 2)))
+  (setq +doom-dashboard-banner-padding '(2 . 2)))
 
 ; (good-scroll-mode 1)
 
+(after! company
+  (map! :i
+   (global-set-key "\t" 'company-complete-common))
+  (setq company-minimum-prefix-length 2
+        company-global-modes '(not erc-mode message-mode help-mode gud-mode org-mode)))
+
 (after! org
-  ;; Workaround for not being able to use `RET' in `org-mode'
-  (add-hook org-mode-hook (lambda () (electric-indent-local-mode -1)))
-  (setq org-startup-indent 0
-        org-startup-folded t)
-  (add-hook! org-mode ((company-mode 0)
-                       (flycheck-mode 0))))
+  (setq org-startup-folded t))
+
+;; Workaround for not being able to use `RET' in `org-mode'
+;; Only needed in Emacs < 28
+; (add-hook org-mode-hook (lambda () (electric-indent-local-mode -1)))
