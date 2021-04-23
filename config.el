@@ -1,9 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
 
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets.
 (setq user-full-name "Jordan King"
       user-mail-address "jordan@jordanking.dev")
 
@@ -14,31 +10,19 @@
 ;; + `doom-variable-pitch-font'
 ;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
 ;;   presentations or streaming.
-;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
-;; BUG: There is something wrong with how Doom handles JP characters. Enabling the
+
+;; TODO BUG: There is something wrong with how Doom handles JP characters. Enabling the
 ;; `unicode' module doesn't help. For now setting both `doom-font' and `doom-unicode-font'
 ;; to the same font seems to do the trick but font-resizing for unicode chars is broken.
 ;; Enabling `unicode' prevents the unicode font specified from even being used
-(setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
-(setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
-(setq doom-variable-pitch-font (font-spec :family "M+ 2c" :size 30 :weight 'light))
-; (setq doom-font (font-spec :family "M+ 2m" :size 16 :weight 'regular))
-; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 16 :weight 'regular))
-; (setq doom-font (font-spec :family "Source Han Code JP" :size 13 :weight 'normal))
+; (setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
+; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
+; (setq doom-variable-pitch-font (font-spec :family "M+ 2c" :size 30 :weight 'light))
+(setq doom-font (font-spec :family "Source Han Code JP" :size 26 :weight 'regular))
+(setq doom-unicode-font (font-spec :family "Source Han Code JP" :size 26 :weight 'regular))
 
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-one)
-
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/documents/org/")
-
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
@@ -58,6 +42,10 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+(load! "jira.el")
+(load! "forge.el")
+(load! "snips.el")
+
 (use-package! scroll-on-jump
   :config
   (setq scroll-on-jump-duration 0.3))
@@ -66,26 +54,22 @@
   (map! :leader
         :desc "M-x" "SPC" #'execute-extended-command)
 
-  ;; TODO: Only about half of these work
-  ;; Just experimenting for now
   (scroll-on-jump-advice-add evil-jump-item)
   (scroll-on-jump-advice-add evil-ex-search-previous)
+  (scroll-on-jump-advice-add evil-ex-search-next)
   (scroll-on-jump-advice-add evil-forward-paragraph)
   (scroll-on-jump-advice-add evil-backward-paragraph)
-  ; (scroll-on-jump-advice-add evil-goto-first-line)
   ;; Actions that themselves scroll.
-  (scroll-on-jump-advice-add better-jumper-jump-forward)
-  (scroll-on-jump-advice-add better-jumper-jump-backward)
-  ; (scroll-on-jump-with-scroll-advice-add evil-goto-line)
   (scroll-on-jump-with-scroll-advice-add evil-scroll-down)
-  ; (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-center)
-  ; (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-top)
-  ; (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-bottom)
   (scroll-on-jump-with-scroll-advice-add evil-scroll-up))
 
 (after! undo-fu
   (scroll-on-jump-advice-add undo-fu-only-undo)
   (scroll-on-jump-advice-add undo-fu-only-redo))
+
+(after! better-jumper
+  (scroll-on-jump-advice-add better-jumper-jump-forward)
+  (scroll-on-jump-advice-add better-jumper-jump-backward))
 
 ;; TODO: Find the record file
 (after! japanese
@@ -93,79 +77,52 @@
   (setq skk-large-jisyo "~/.local/share/skk/SKK-JISYO.L"
         skk-record-file "~/.local/share/skk/SKK-RECORD"))
 
-;; For when lsp-mode fixes imenu support for typescript
-; (defun my/filter-items (orig-fun item)
-  ; (or (funcall orig-fun item)
-      ; (eq (gethash "kind" item) 13)
-      ; (eq (gethash "kind" item) 14)
-      ; (eq (gethash "kind" item) 15)
-      ; (eq (gethash "kind" item) 16)
-      ; (eq (gethash "kind" item) 17)
-      ; (eq (gethash "kind" item) 18)
-      ; (eq (gethash "kind" item) 19)
-      ; (eq (gethash "kind" item) 20)
-      ; (eq (gethash "kind" item) 21)
-      ; (eq (gethash "kind" item) 22)
-      ; (eq (gethash "kind" item) 23)
-      ; (eq (gethash "kind" item) 24)
-      ; (eq (gethash "kind" item) 25)
-      ; (eq (gethash "kind" item) 26)))
-
+;; TODO: typescript intellisense
 (after! lsp-mode
+  (add-hook! lsp-completion-mode
+   ;(setq-local +lsp-company-backends '(:separate company-yasnippet company-capf)))
+    (setq-local +lsp-company-backends '(company-capf)))
   (setq lsp-auto-execute-action nil
-        ; lsp-enable-imenu 1
-        ; lsp-imenu-index-symbol-kinds '(Method Property Field Constructor Enum Interface Event Struct)
-        ; lsp-imenu-index-symbol-kinds '(Miscellaneous)
-        ; Could be great for csharp
-        ; lsp-headerline-breadcrumb-enable 1
-        ; lsp-headerline-breadcrumb-segments '(project file symbols)
-        ; lsp-clients-typescript-tls-path "~/.local/share/npm/bin/typescript-language-server"
-        lsp-clients-typescript-log-verbosity "debug"
-        ; I may remove this entirely as it seems the functionality has recently been gutted
-        lsp-clients-typescript-plugins (vector
-                                        (list :name "typescript-tslint-plugin"))))
-                                            ; :location "/node_modules/typescript-tslint-plugin/"))))
-                                            ; :location "/home/jordan/.local/share/npm/lib/node_modules/typescript-tslint-plugin/"))))
-                                            ; :location "~/.emacs.d/.local/npm/node_modules/typescript-tslint-plugin/"))))
+        lsp-signature-auto-activate nil
+        lsp-signature-render-documentation nil
+        lsp-modeline-diagnostics-enable nil
+        lsp-modeline-code-actions-enable nil
+        lsp-imenu-sort-methods '(position)
+        lsp-clients-typescript-log-verbosity "debug"))
 
 (after! lsp-ui
-  (setq lsp-ui-sideline-show-code-actions nil
-        lsp-ui-sideline-show-symbol nil
-        lsp-ui-sideline-diagnostic-max-lines 10
-        lsp-ui-sideline-diagnostic-max-line-length 75))
+  (setq lsp-ui-sideline-actions-icon nil))
 
 (after! doom-modeline
-  (setq doom-modeline-bar-width 3
-        ; doom-modeline-buffer-file-name-style 'buffer-name
-        doom-modeline-buffer-file-name-style 'file-name
+  (setq doom-modeline-buffer-file-name-style 'file-name
         doom-modeline-buffer-encoding nil
         doom-modeline-vcs-max-length 18
-        doom-modeline-persp-icon nil
         doom-modeline-buffer-modification-icon nil))
-
-(after! treemacs
-  (setq treemacs-width 50
-        treemacs-recenter-distance 0.05
-        treemacs--icon-size 24
-        treemacs-recenter-after-file-follow 'on-distance)
-  (treemacs-follow-mode 1))
-
-(add-hook! treemacs-mode
-  (treemacs-load-theme "doom-atom"))
 
 (after! highlight-indent-guides
   (setq highlight-indent-guides-character 124
         highlight-indent-guides-responsive 'top))
 
-;; TODO: Make this purely idle-delay based instead
 (after! flycheck
-  ; (setq flycheck-check-syntax-automatically
-        ; '(save mode-enabled idle-buffer-switch new-line))
   (setq flycheck-global-modes '(not org-mode))
   (map! :leader
         (:prefix-map ("c" . "code")
          :desc "Next error"     "n" #'flycheck-next-error
          :desc "Previous error" "p" #'flycheck-previous-error)))
+
+(after! ranger
+  (add-hook! ranger-mode #'hide-mode-line-mode)
+  (map! :map ranger-mode-map
+        (:prefix-map ("c")
+         :desc "Create file"           "f" #'dired-create-empty-file
+         :desc "Create directory"      "d" #'dired-create-directory))
+  (setq ranger-show-hidden t
+        ranger-modify-header nil))
+
+(after! dired
+  (map! :leader
+        (:prefix-map ("f" . "file")
+         :desc "Open current directory" "o" #'dired-jump)))
 
 ;; DOOG
 (setq fancy-splash-image "~/.doom.d/doog2.png")
@@ -173,16 +130,61 @@
 (add-hook! +doom-dashboard-mode
   (setq +doom-dashboard-banner-padding '(2 . 2)))
 
+; TODO configure and add use-package
+; (setq good-scroll-step 180
+      ; good-scroll-avoid-vscroll-reset nil)
 ; (good-scroll-mode 1)
 
 (after! company
-  (map! :desc "Complete common" :i "." #'company-complete-common)
-  (setq company-minimum-prefix-length 2
-        company-global-modes '(not erc-mode message-mode help-mode gud-mode org-mode)))
-
-(after! org
-  (setq org-startup-folded t))
+  (setq company-global-modes '(not
+                               text-mode ; This one may be overkill
+                               erc-mode
+                               message-mode
+                               help-mode
+                               gud-mode
+                               gfm-mode
+                               forge-post-mode
+                               org-mode)))
 
 ;; Workaround for not being able to use `RET' in `org-mode'
-;; Only needed in Emacs < 28
+;; TODO: Only needed in Emacs < 28 (actually seems like this isn't the case)
 ; (add-hook org-mode-hook (lambda () (electric-indent-local-mode -1)))
+(after! org
+  (setq org-startup-folded t
+        org-id-track-globally t
+        org-tags-match-list-sublevels nil))
+
+(after! ivy
+  (setq +ivy-buffer-preview t)
+  (add-to-list 'ivy-more-chars-alist
+               '(counsel-rg . 3)))
+
+;; TODO: Fix markdown mode icon in file browser
+(after! all-the-icons
+  ; Fix certain icons that're poorly sized
+  (add-to-list 'all-the-icons-icon-alist
+    '("\\.less$" all-the-icons-alltheicon "less"       :height 1.0 :face all-the-icons-dyellow))
+  (add-to-list 'all-the-icons-icon-alist
+    '("\\.png$"  all-the-icons-octicon    "file-media" :height 1.125 :v-adjust 0.0 :face all-the-icons-orange))
+  (add-to-list 'all-the-icons-icon-alist
+    '("\\.otf$"  all-the-icons-fileicon   "font"       :v-adjust 0.0 :face all-the-icons-dcyan))
+  ; Mode icons
+  (add-to-list 'all-the-icons-mode-icon-alist
+    '(less-css-mode all-the-icons-alltheicon  "less"  :height 1.0 :face all-the-icons-dyellow))
+  (add-to-list 'all-the-icons-mode-icon-alist
+    '(web-mode      all-the-icons-alltheicon  "html5" :face all-the-icons-orange)))
+
+(after! all-the-icons-ivy
+  (add-hook! ivy-mode (setq-local tab-width 2))
+  (add-hook! counsel-mode (setq-local tab-width 2)))
+
+(after! all-the-icons-dired
+  (add-hook! all-the-icons-dired-mode (setq-local tab-width 2))
+  (setq all-the-icons-dired-monochrome nil))
+
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "wslview")
+
+; For suggestions `~/.emacs.d/.local/etc/ispell/en_GB.pws' needs modifying to specify
+; the typical en dictionary
+(setq ispell-dictionary "en_GB")

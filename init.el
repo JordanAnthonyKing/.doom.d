@@ -1,20 +1,7 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; This file controls what Doom modules are enabled and what order they load
-;; in. Remember to run 'doom sync' after modifying it!
-
-;; NOTE Press 'SPC h d h' (or 'C-h d h' for non-vim users) to access Doom's
-;;      documentation. There you'll find a "Module Index" link where you'll find
-;;      a comprehensive list of Doom's modules and what flags they support.
-
-;; NOTE Move your cursor over a module's name (or its flags) and press 'K' (or
-;;      'C-c c k' for non-vim users) to view its documentation. This works on
-;;      flags as well (those symbols that start with a plus).
-;;
-;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
-;;      directory (for easy access to its source code).
-
-;; NOTE Hack
+;; NOTE: Hack
+;; TODO: Move this?
 (use-package-hook! ivy-rich
   :pre-config
   (plist-put ivy-rich-display-transformers-list
@@ -40,7 +27,8 @@
         +childframe)       ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       (ivy +prescient)                 ; a search engine for love and life
+       (ivy                ; a search engine for love and life
+        +icons +prescient)
 
        :ui
        ;;deft              ; notational velocity for Emacs
@@ -60,7 +48,7 @@
        ophints             ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        ;;tabs              ; a tab bar for Emacs
-       treemacs            ; a project drawer, like neotree but cooler
+       ;;treemacs          ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
        vc-gutter           ; vcs diff in the fringe
        ;;vi-tilde-fringe   ; fringe tildes to mark beyond EOB
@@ -83,22 +71,24 @@
        word-wrap           ; soft wrapping with language-aware indent
 
        :emacs
-       dired               ; making dired pretty [functional]
+       (dired
+        +ranger +icons)    ; making dired pretty [functional]
        electric            ; smarter, keyword-based electric-indent
        ibuffer             ; interactive buffer management
        undo                ; persistent, smarter undo for your inevitable mistakes
        vc                  ; version-control and Emacs, sitting in a tree
 
        :term
-       ;eshell              ; the elisp shell that works everywhere
+       ;;eshell            ; the elisp shell that works everywhere
        ;;shell             ; simple shell REPL for Emacs
        ;;term              ; basic terminal emulator for Emacs
-       ;;vterm             ; the best terminal emulation in Emacs
+       vterm               ; the best terminal emulation in Emacs
 
        :checkers
-       syntax              ; tasing you for every semicolon you forget
-       ;;+childframe
-       ;;spell             ; tasing you for misspelling mispelling
+       (syntax             ; tasing you for every semicolon you forget
+        +childframe)
+       (spell              ; tasing you for misspelling mispelling
+        +aspell)
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
@@ -112,7 +102,8 @@
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
        lsp
-       ;magit              ; a git porcelain for Emacs
+       (magit
+        +forge)            ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
        ;;pdf               ; pdf enhancements
