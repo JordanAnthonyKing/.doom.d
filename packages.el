@@ -51,3 +51,5 @@
   ; :recipe (:host github :repo "io12/good-scroll.el"))
 (package! scroll-on-jump
   :recipe (:type git :host gitlab :repo "ideasman42/emacs-scroll-on-jump"))
+(package! valign)
+(unpin! ddskk)

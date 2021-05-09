@@ -91,7 +91,8 @@
         lsp-clients-typescript-log-verbosity "debug"))
 
 (after! lsp-ui
-  (setq lsp-ui-sideline-actions-icon nil))
+  (setq lsp-ui-sideline-actions-icon nil
+        lsp-ui-sideline-diagnostic-max-lines 5))
 
 (after! doom-modeline
   (setq doom-modeline-buffer-file-name-style 'file-name
@@ -150,6 +151,7 @@
 ;; TODO: Only needed in Emacs < 28 (actually seems like this isn't the case)
 ; (add-hook org-mode-hook (lambda () (electric-indent-local-mode -1)))
 (after! org
+  (add-hook! 'org-mode-hook #'valign-mode)
   (setq org-startup-folded t
         org-id-track-globally t
         org-tags-match-list-sublevels nil))
