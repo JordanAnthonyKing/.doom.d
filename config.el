@@ -18,8 +18,8 @@
 ; (setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
 ; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
 ; (setq doom-variable-pitch-font (font-spec :family "M+ 2c" :size 30 :weight 'light))
-(setq doom-font (font-spec :family "Source Han Code JP" :size 26 :weight 'regular))
-(setq doom-unicode-font (font-spec :family "Source Han Code JP" :size 26 :weight 'regular))
+(setq doom-font (font-spec :family "Source Han Code JP" :size 12 :weight 'regular))
+(setq doom-unicode-font (font-spec :family "Source Han Code JP" :size 12 :weight 'regular))
 
 (setq doom-theme 'doom-one)
 (setq org-directory "~/documents/org/")
@@ -45,6 +45,7 @@
 (load! "jira.el")
 (load! "forge.el")
 (load! "snips.el")
+(load! "shrink-path.el")
 
 (use-package! scroll-on-jump
   :config
@@ -77,7 +78,6 @@
   (setq skk-large-jisyo "~/.local/share/skk/SKK-JISYO.L"
         skk-record-file "~/.local/share/skk/SKK-RECORD"))
 
-;; TODO: typescript intellisense
 (after! lsp-mode
   (add-hook! lsp-completion-mode
    ;(setq-local +lsp-company-backends '(:separate company-yasnippet company-capf)))
@@ -88,7 +88,10 @@
         lsp-modeline-diagnostics-enable nil
         lsp-modeline-code-actions-enable nil
         lsp-imenu-sort-methods '(position)
-        lsp-clients-typescript-log-verbosity "debug"))
+        lsp-clients-typescript-log-verbosity "debug"
+        lsp-clients-typescript-plugins (vector (list
+                                                :name "@vsintellicode/typescript-intellicode-plugin"
+                                                :location "/home/jordan/.vscode/extensions/visualstudioexptteam.vscodeintellicode-1.2.13/"))))
 
 (after! lsp-ui
   (setq lsp-ui-sideline-actions-icon nil
@@ -147,10 +150,8 @@
                                forge-post-mode
                                org-mode)))
 
-;; Workaround for not being able to use `RET' in `org-mode'
-;; TODO: Only needed in Emacs < 28 (actually seems like this isn't the case)
-; (add-hook org-mode-hook (lambda () (electric-indent-local-mode -1)))
 (after! org
+  ; TODO: Put these in one hook together
   (add-hook! 'org-mode-hook #'valign-mode)
   (setq org-startup-folded t
         org-id-track-globally t
@@ -158,8 +159,45 @@
 
 (after! ivy
   (setq +ivy-buffer-preview t)
+  ; (setq counsel-projectile-find-file-matcher 'counsel-projectile-find-file-matcher-basename)
   (add-to-list 'ivy-more-chars-alist
                '(counsel-rg . 3)))
+
+; (after! ivy-rich
+;  (plist-put! ivy-rich-display-transformers-list
+;              'counsel-projectile-find-file (lambda (x) (shrink-path-dirs x)))
+;  (ivy-rich-set-display-transformer))
+
+; (after! counsel-projectile
+  ; (ivy-set-display-transformer
+        ; #'counsel-projectile-find-file (lambda (x) (shrink-path-dirs x))))
+
+; (after! ivy-rich
+  ; (ivy-set-display-transformer #'counsel-projectile-find-file #'shrink-path-dirs)
+  ; (ivy-rich-set-display-transformer))
+
+;; NOTE: Hack
+;; TODO: Move this?
+;(use-package-hook! ivy-rich
+  ;:pre-config
+  ;(plist-put! ivy-rich-display-transformers-list
+              ;'counsel-projectile-find-file (lambda (x) (shrink-path-dirs x)))
+  ;; (plist-put ivy-rich-display-transformers-list
+             ;; 'ivy-switch-buffer
+             ;; '(:columns
+               ;; ((ivy-switch-buffer-transformer (:width 45))                              ; add face by the original transformer
+                ;; (ivy-rich-switch-buffer-size (:width 7))                                 ; return buffer size
+                ;; (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right))  ; return buffer indicator
+                ;; (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))            ; return major mode info
+                ;; (ivy-rich-switch-buffer-project (:width 15 :face success))               ; return project name `projectile'
+                ;; (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))
+               ;; :predicate                                                                ; return file path relative to project root or `default-directory' if project is nil
+               ;; (lambda (cand) (get-buffer cand))))
+  ;)
+
+
+; (after! projectile
+  ; (setq projectile-sort-order 'recently-active))
 
 ;; TODO: Fix markdown mode icon in file browser
 (after! all-the-icons
@@ -173,6 +211,7 @@
   ; Mode icons
   (add-to-list 'all-the-icons-mode-icon-alist
     '(less-css-mode all-the-icons-alltheicon  "less"  :height 1.0 :face all-the-icons-dyellow))
+  ; This needs some :v-adjust
   (add-to-list 'all-the-icons-mode-icon-alist
     '(web-mode      all-the-icons-alltheicon  "html5" :face all-the-icons-orange)))
 
@@ -190,3 +229,7 @@
 ; For suggestions `~/.emacs.d/.local/etc/ispell/en_GB.pws' needs modifying to specify
 ; the typical en dictionary
 (setq ispell-dictionary "en_GB")
+
+(setq
+ scroll-margin 3
+ mouse-wheel-scroll-amount '(1 ((shift) . hscroll)))
