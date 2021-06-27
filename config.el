@@ -41,6 +41,7 @@
 (load! "jira.el")
 (load! "forge.el")
 (load! "snips.el")
+(load! "org.el")
 
 ;; Scrolling
 (setq
@@ -139,8 +140,7 @@
   (setq +doom-dashboard-banner-padding '(2 . 2)))
 
 (after! company
- ;; TODO: This edit doesn't work right
- (plist-put! company-global-modes '(org-mode forge-post-mode markdown-mode text-mode)))
+ (plist-put! company-global-modes 'org-mode 'forge-post-mode 'markdown-mode 'text-mode))
 
 ;; Ivy
 (after! ivy
@@ -165,4 +165,3 @@
 ;; the typical en dictionary
 (setq ispell-dictionary "en_GB")
 
-(load! "org.el")
