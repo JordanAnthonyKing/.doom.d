@@ -11,9 +11,9 @@
 ;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
 ;;   presentations or streaming.
 
-; (setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
-; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
-; (setq doom-variable-pitch-font (font-spec :family "M+ 2c" :size 30 :weight 'light))
+                                        ; (setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
+                                        ; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
+                                        ; (setq doom-variable-pitch-font (font-spec :family "M+ 2c" :size 30 :weight 'light))
 (setq doom-font (font-spec :family "Source Han Code JP" :size 12 :weight 'regular))
 (setq doom-unicode-font (font-spec :family "Source Han Code JP" :size 12 :weight 'regular))
 
@@ -86,6 +86,7 @@
 (after! lsp-mode
   (add-hook! lsp-completion-mode
     (setq-local +lsp-company-backends '(company-capf)))
+  ; (add-hook! css-mode-hook #'(lsp-headerline-breadcrumb-mode))
   (setq ; lsp-auto-execute-action nil
         ; lsp-signature-auto-activate nil
         ; lsp-signature-render-documentation nil
@@ -93,13 +94,23 @@
         ; lsp-modeline-code-actions-enable nil
         ; lsp-imenu-sort-methods '(position)
         ; lsp-clients-typescript-log-verbosity "debug"
-        lsp-clients-typescript-plugins (vector (list
-                                                :name "@vsintellicode/typescript-intellicode-plugin"
-                                                :location "/home/jordan/.vscode/extensions/visualstudioexptteam.vscodeintellicode-1.2.13/"))))
+        lsp-headerline-breadcrumb-segments '(symbols)
+        ; lsp-headerline-breadcrumb-enable t
+        lsp-headerline-breadcrumb-icons-enable t
+        lsp-clients-typescript-plugins (vector
+                                        (list
+                                        :name "@vsintellicode/typescript-intellicode-plugin"
+                                        :location "/home/jordan/.vscode/extensions/visualstudioexptteam.vscodeintellicode-1.2.13/"))))
 
 ; (after! lsp-ui
-  ; (setq lsp-ui-sideline-actions-icon nil
-        ; lsp-ui-sideline-diagnostic-max-lines 5))
+; (setq lsp-ui-sideline-actions-icon nil
+; lsp-ui-sideline-diagnostic-max-lines 5))
+
+(add-hook! '(css-mode-local-vars-hook
+             scss-mode-local-vars-hook
+             sass-mode-local-vars-hook
+             less-css-mode-local-vars-hook)
+             #'lsp-headerline-breadcrumb-mode)
 
 ;; Modeline
 (after! doom-modeline
@@ -140,12 +151,12 @@
   (setq +doom-dashboard-banner-padding '(2 . 2)))
 
 (after! company
- (plist-put! company-global-modes 'org-mode 'forge-post-mode 'markdown-mode 'text-mode))
+  (plist-put! company-global-modes 'org-mode 'forge-post-mode 'markdown-mode 'text-mode))
 
 ;; Ivy
 (after! ivy
- (add-to-list #'ivy-more-chars-alist '(counsel-rg . 3))
- (setq +ivy-buffer-preview t))
+  (add-to-list #'ivy-more-chars-alist '(counsel-rg . 3))
+  (setq +ivy-buffer-preview t))
 
 ;; Icons
 (after! all-the-icons-ivy
@@ -164,4 +175,3 @@
 ;; For suggestions `~/.emacs.d/.local/etc/ispell/en_GB.pws' needs modifying to specify
 ;; the typical en dictionary
 (setq ispell-dictionary "en_GB")
-
