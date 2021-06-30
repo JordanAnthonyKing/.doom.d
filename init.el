@@ -1,6 +1,6 @@
 ;;; init.el -*- lexical-binding: t; -*-
 (use-package-hook! pangu-spacing
-  :pre-config
+  :pre-init
   nil)
 
 (doom! :input

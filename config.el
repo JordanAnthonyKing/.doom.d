@@ -87,6 +87,7 @@
   (add-hook! lsp-completion-mode
     (setq-local +lsp-company-backends '(company-capf)))
   ; (add-hook! css-mode-hook #'(lsp-headerline-breadcrumb-mode))
+  (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
   (setq ; lsp-auto-execute-action nil
         ; lsp-signature-auto-activate nil
         ; lsp-signature-render-documentation nil
@@ -94,7 +95,7 @@
         ; lsp-modeline-code-actions-enable nil
         ; lsp-imenu-sort-methods '(position)
         ; lsp-clients-typescript-log-verbosity "debug"
-        lsp-headerline-breadcrumb-segments '(symbols)
+        lsp-headerline-breadcrumb-segments '(file symbols)
         ; lsp-headerline-breadcrumb-enable t
         lsp-headerline-breadcrumb-icons-enable t
         lsp-clients-typescript-plugins (vector
