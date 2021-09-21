@@ -3,14 +3,28 @@
   :pre-init
   nil)
 
+(if (display-graphic-p)
+    (progn
+     (setq initial-frame-alist
+            '((tool-bar-lines . 0)
+              (width . 85)
+              (height . 60)))
+      (setq default-frame-alist
+            '((tool-bar-lines . 0)
+              (width . 85)
+              (height . 60)))))
+
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+
 (doom! :input
        ;;chinese
        japanese
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       ;;(company
-       ;; +childframe)       ; the ultimate code completion backend
+       (company
+        +childframe)       ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        (ivy                ; a search engine for love and life
@@ -72,8 +86,8 @@
        ;;vterm               ; the best terminal emulation in Emacs
 
        :checkers
-       ;;(syntax             ; tasing you for every semicolon you forget
-       ;; +childframe)
+       (syntax             ; tasing you for every semicolon you forget
+        +childframe)
        ;;(spell              ; tasing you for misspelling mispelling
        ;; +aspell)
        ;;grammar           ; tasing grammar mistake every you make
@@ -114,7 +128,7 @@
        ;;crystal           ; ruby at the speed of c
        ;;(csharp
        ;; +lsp +dotnet)    ; unity, .NET, and mono shenanigans
-       data                ; config/data formats
+       ;; data                ; config/data formats
        ;;(dart +flutter)   ; paint ui and not much else
        ;;elixir            ; erlang done right
        ;;elm               ; care for a cup of TEA?

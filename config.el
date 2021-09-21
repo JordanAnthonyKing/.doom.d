@@ -14,8 +14,8 @@
                                         ; (setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
                                         ; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
                                         ; (setq doom-variable-pitch-font (font-spec :family "M+ 2c" :size 30 :weight 'light))
-(setq doom-font (font-spec :family "Source Han Code JP" :size 12 :weight 'regular))
-(setq doom-unicode-font (font-spec :family "Source Han Code JP" :size 12 :weight 'regular))
+(setq doom-font (font-spec :family "Source Han Code JP R" :size 16))
+(setq doom-unicode-font (font-spec :family "Source Han Code JP R" :size 16))
 
 (setq doom-theme 'doom-one)
 (setq org-directory "~/documents/org/")
@@ -38,9 +38,9 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(load! "jira.el")
-(load! "forge.el")
-(load! "snips.el")
+;;(load! "jira.el")
+;;(load! "forge.el")
+;;(load! "snips.el")
 (load! "org.el")
 
 ;; Scrolling
@@ -79,8 +79,8 @@
 ;; TODO: Find an easy way to quit
 (after! japanese
   (map! "C-x C-j" #'skk-mode)
-  (setq skk-large-jisyo "~/.local/share/skk/SKK-JISYO.L"
-        skk-record-file "~/.local/share/skk/SKK-RECORD"))
+  (setq skk-large-jisyo "~/.doom.d/skk/SKK-JISYO.L"
+        skk-record-file "~/.doom.d/skk/SKK-RECORD"))
 
 ;; LSP
 (after! lsp-mode
@@ -147,9 +147,9 @@
          :desc "Open current directory" "o" #'dired-jump)))
 
 ;; DOOG
-(setq fancy-splash-image "~/.doom.d/doog2.png")
-(add-hook! +doom-dashboard-mode
-  (setq +doom-dashboard-banner-padding '(2 . 2)))
+;; (setq fancy-splash-image "~/.doom.d/doog-small.png")
+;; (add-hook! +doom-dashboard-mode
+  ;; (setq +doom-dashboard-banner-padding '(2 . 2)))
 
 (after! company
   (plist-put! company-global-modes 'org-mode 'forge-post-mode 'markdown-mode 'text-mode))
