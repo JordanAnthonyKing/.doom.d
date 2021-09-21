@@ -9,8 +9,8 @@
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       (company
-        +childframe)       ; the ultimate code completion backend
+       ;;(company
+       ;; +childframe)       ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        (ivy                ; a search engine for love and life
@@ -69,13 +69,13 @@
        ;;eshell            ; the elisp shell that works everywhere
        ;;shell             ; simple shell REPL for Emacs
        ;;term              ; basic terminal emulator for Emacs
-       vterm               ; the best terminal emulation in Emacs
+       ;;vterm               ; the best terminal emulation in Emacs
 
        :checkers
-       (syntax             ; tasing you for every semicolon you forget
-        +childframe)
-       (spell              ; tasing you for misspelling mispelling
-        +aspell)
+       ;;(syntax             ; tasing you for every semicolon you forget
+       ;; +childframe)
+       ;;(spell              ; tasing you for misspelling mispelling
+       ;; +aspell)
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
@@ -88,9 +88,9 @@
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
-       lsp
-       (magit
-        +forge)            ; a git porcelain for Emacs
+       ;;lsp
+       ;;(magit
+       ;; +forge)            ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
        ;;pdf               ; pdf enhancements
@@ -129,11 +129,11 @@
        ;;(haskell +dante)  ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ; a language you can depend on
-       (json
-        +lsp)              ; At least it ain't XML
+       ;;(json
+       ;; +lsp)              ; At least it ain't XML
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-       (javascript
-        +lsp)              ; all(hope(abandon(ye(who(enter(here))))))
+       ;;(javascript
+       ;; +lsp)              ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
        ;;latex             ; writing papers in Emacs has never been so fun
@@ -160,12 +160,12 @@
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
        ;;scheme            ; a fully conniving family of lisps
-       sh                  ; she sells {ba,z,fi}sh shells on the C xor
+       ;;sh                  ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
-       (web +lsp)          ; the tubes
+       ;;(web +lsp)          ; the tubes
        ;;yaml              ; JSON, but readable
 
        :email
