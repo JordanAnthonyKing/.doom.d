@@ -82,7 +82,8 @@
 (after! japanese
   (map! "C-x C-j" #'skk-mode)
   (setq skk-large-jisyo "~/.local/share/skk/SKK-JISYO.L"
-        skk-record-file "~/.local/share/skk/SKK-RECORD"))
+        skk-record-file "~/.local/share/skk/SKK-RECORD")
+  (remove-hook 'text-mode-hook 'pangu-spacing-mode))
 
 ;; LSP
 (after! lsp-mode
