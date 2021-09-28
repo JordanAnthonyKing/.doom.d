@@ -1,4 +1,6 @@
 ;;; init.el -*- lexical-binding: t; -*-
+
+;; This doesn't disable pangu-spacing
 (use-package-hook! pangu-spacing
   :pre-init
   nil)
@@ -9,8 +11,8 @@
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       (company
-        +childframe)       ; the ultimate code completion backend
+       company
+       ;;+childframe)      ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        (ivy                ; a search engine for love and life
@@ -39,7 +41,7 @@
        ;;unicode           ; extended unicode support for various languages
        vc-gutter           ; vcs diff in the fringe
        ;;vi-tilde-fringe   ; fringe tildes to mark beyond EOB
-       ;;window-select       ; visually switch windows
+       ;;window-select     ; visually switch windows
        workspaces          ; tab emulation, persistence & separate workspaces
        zen                 ; distraction-free coding or writing
 
@@ -72,8 +74,8 @@
        vterm               ; the best terminal emulation in Emacs
 
        :checkers
-       (syntax             ; tasing you for every semicolon you forget
-        +childframe)
+       syntax              ; tasing you for every semicolon you forget
+       ;; +childframe)
        (spell              ; tasing you for misspelling mispelling
         +aspell)
        ;;grammar           ; tasing grammar mistake every you make
@@ -89,8 +91,8 @@
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
        lsp
-       (magit
-        +forge)            ; a git porcelain for Emacs
+       magit
+       ;; +forge)          ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
        ;;pdf               ; pdf enhancements
@@ -145,8 +147,8 @@
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       (org
-        +pomodoro)         ; organize your plain life in plain text
+       org
+       ;;+pomodoro)        ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
