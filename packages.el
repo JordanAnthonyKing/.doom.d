@@ -43,13 +43,6 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-; Interferes with yascroll
-; (package! yascroll)
-; (package! ejira :recipe (:host github :repo "nyyManni/ejira"))
-; Currently has a big
-; (package! good-scroll
-; :recipe (:host github :repo "io12/good-scroll.el"))
 (package! scroll-on-jump
   :recipe (:type git :host gitlab :repo "ideasman42/emacs-scroll-on-jump"))
 (package! valign)
-; (unpin! ddskk)

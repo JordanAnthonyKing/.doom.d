@@ -37,8 +37,6 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-; (load! "jira.el")
-; (load! "forge.el")
 ; (load! "snips.el")
 (load! "org.el")
 
@@ -54,7 +52,9 @@
 
 (after! evil
   (map! :leader
-        :desc "M-x" "SPC" #'execute-extended-command)
+        :desc "M-x" "SPC" #'execute-extended-command
+        :n "gj" #'evil-next-visual-line
+        :n "gk" #'evil-previous-visual-line)
 
   (map! :n "gj" #'evil-next-visual-line
         :n "gk" #'evil-previous-visual-line)
@@ -86,41 +86,51 @@
 
 ;; LSP
 (after! lsp-mode
-  (add-hook! lsp-completion-mode
-    (setq-local +lsp-company-backends '(company-capf)))
-  ; (add-hook! css-mode-hook #'(lsp-headerline-breadcrumb-mode))
-  (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
-  (setq ; lsp-auto-execute-action nil
-        ; lsp-signature-auto-activate nil
-        ; lsp-signature-render-documentation nil
-        ; lsp-modeline-diagnostics-enable nil
-        ; lsp-modeline-code-actions-enable nil
-        ; lsp-imenu-sort-methods '(position)
-        ; lsp-clients-typescript-log-verbosity "debug"
-        lsp-headerline-breadcrumb-segments '(file symbols)
-        ; lsp-headerline-breadcrumb-enable t
-        lsp-headerline-breadcrumb-icons-enable t
-        lsp-clients-typescript-plugins (vector
-                                        (list
-                                        :name "@vsintellicode/typescript-intellicode-plugin"
-                                        :location "/home/jordan/.vscode/extensions/visualstudioexptteam.vscodeintellicode-1.2.13/"))))
+ (setq lsp-clients-typescript-plugins
+       (vector (list
+        :name "@vsintellicode/typescript-intellicode-plugin"
+        :location "/home/jordan/.vscode/extensions/visualstudioexptteam.vscodeintellicode-1.2.13/"))))
 
-; (after! lsp-ui
-; (setq lsp-ui-sideline-actions-icon nil
-; lsp-ui-sideline-diagnostic-max-lines 5))
-
-(add-hook! '(css-mode-local-vars-hook
-             scss-mode-local-vars-hook
-             sass-mode-local-vars-hook
-             less-css-mode-local-vars-hook)
-             #'lsp-headerline-breadcrumb-mode)
+;(after! lsp-mode
+  ; (add-hook! lsp-completion-mode
+    ; (setq-local +lsp-company-backends '(company-capf)))
+  ; ; (add-hook! css-mode-hook #'(lsp-headerline-breadcrumb-mode))
+  ; (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
+  ; (setq ; lsp-auto-execute-action nil
+        ; ; lsp-signature-auto-activate nil
+        ; ; lsp-signature-render-documentation nil
+        ; ; lsp-modeline-diagnostics-enable nil
+        ; ; lsp-modeline-code-actions-enable nil
+        ; ; lsp-imenu-sort-methods '(position)
+        ; ; lsp-clients-typescript-log-verbosity "debug"
+        ; lsp-headerline-breadcrumb-segments '(file symbols)
+        ; ; lsp-headerline-breadcrumb-enable t
+        ; lsp-headerline-breadcrumb-icons-enable t
+        ; lsp-clients-typescript-plugins (vector
+                                        ; (list
+                                        ; :name "@vsintellicode/typescript-intellicode-plugin"
+                                        ; :location "/home/jordan/.vscode/extensions/visualstudioexptteam.vscodeintellicode-1.2.13/"))))
+;
+; ; (after! lsp-ui
+; ; (setq lsp-ui-sideline-actions-icon nil
+; ; lsp-ui-sideline-diagnostic-max-lines 5))
+;
+; (add-hook! '(css-mode-local-vars-hook
+             ; scss-mode-local-vars-hook
+             ; sass-mode-local-vars-hook
+             ; less-css-mode-local-vars-hook)
+             ; #'lsp-headerline-breadcrumb-mode)
 
 ;; Modeline
+; (after! doom-modeline
+  ; (setq doom-modeline-buffer-file-name-style 'file-name
+        ; doom-modeline-buffer-encoding nil
+        ; doom-modeline-vcs-max-length 18
+        ; doom-modeline-buffer-modification-icon nil))
+
 (after! doom-modeline
-  (setq doom-modeline-buffer-file-name-style 'file-name
-        doom-modeline-buffer-encoding nil
-        doom-modeline-vcs-max-length 18
-        doom-modeline-buffer-modification-icon nil))
+  (setq doom-modeline-buffer-encoding nil
+        doom-modeline-vcs-max-length 18))
 
 ;; Guides
 (after! highlight-indent-guides
@@ -171,6 +181,7 @@
   (setq all-the-icons-dired-monochrome nil))
 
 ;; Browser
+;; TODO: I don't know if this works
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "wslview")
 
