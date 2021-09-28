@@ -1,5 +1,4 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-
 (setq user-full-name "Jordan King"
       user-mail-address "jordan@jordanking.dev")
 
@@ -11,11 +10,11 @@
 ;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
 ;;   presentations or streaming.
 
-                                        ; (setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
-                                        ; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
-                                        ; (setq doom-variable-pitch-font (font-spec :family "M+ 2c" :size 30 :weight 'light))
-(setq doom-font (font-spec :family "Source Han Code JP" :size 12 :weight 'regular))
-(setq doom-unicode-font (font-spec :family "Source Han Code JP" :size 12 :weight 'regular))
+; (setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
+; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
+; (setq doom-variable-pitch-font (font-spec :family "M+ 2c" :size 30 :weight 'light))
+(setq doom-font (font-spec :family "Source Han Code JP" :size 16 :weight 'regular))
+(setq doom-unicode-font (font-spec :family "Source Han Code JP" :size 16 :weight 'regular))
 
 (setq doom-theme 'doom-one)
 (setq org-directory "~/documents/org/")
@@ -38,9 +37,9 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(load! "jira.el")
-(load! "forge.el")
-(load! "snips.el")
+; (load! "jira.el")
+; (load! "forge.el")
+; (load! "snips.el")
 (load! "org.el")
 
 ;; Scrolling
@@ -56,6 +55,9 @@
 (after! evil
   (map! :leader
         :desc "M-x" "SPC" #'execute-extended-command)
+
+  (map! :n "gj" #'evil-next-visual-line
+        :n "gk" #'evil-previous-visual-line)
 
   (scroll-on-jump-advice-add evil-jump-item)
   (scroll-on-jump-advice-add evil-ex-search-previous)
