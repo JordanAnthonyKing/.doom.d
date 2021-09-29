@@ -127,7 +127,8 @@
         ; doom-modeline-buffer-modification-icon nil))
 
 (after! doom-modeline
-  (setq doom-modeline-buffer-encoding nil
+  (setq doom-modeline-buffer-file-name-style 'file-name
+        doom-modeline-buffer-encoding nil
         doom-modeline-vcs-max-length 18))
 
 ;; Guides
