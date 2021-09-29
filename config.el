@@ -1,5 +1,4 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-
 (setq user-full-name "Jordan King"
       user-mail-address "jordan@jordanking.dev")
 
@@ -11,11 +10,11 @@
 ;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
 ;;   presentations or streaming.
 
-; (setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
-; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular :slant 'italic))
+; (setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
+; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
 ; (setq doom-variable-pitch-font (font-spec :family "M+ 2c" :size 30 :weight 'light))
-(setq doom-font (font-spec :family "Source Han Code JP" :size 24 :weight 'regular))
-(setq doom-unicode-font (font-spec :family "Source Han Code JP" :size 24 :weight 'regular))
+(setq doom-font (font-spec :family "Source Han Code JP" :size 16 :weight 'regular))
+(setq doom-unicode-font (font-spec :family "Source Han Code JP" :size 16 :weight 'regular))
 
 (setq doom-theme 'doom-one)
 (setq org-directory "~/documents/org/")
@@ -38,7 +37,7 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(load! "snips.el")
+; (load! "snips.el")
 (load! "org.el")
 
 ;; Scrolling
@@ -52,8 +51,8 @@
         scroll-on-jump-smooth nil))
 
 (after! evil
-  (map! :leader
-        :desc "M-x" "SPC" #'execute-extended-command
+  (map! (:leader
+         :desc "M-x" "SPC" #'execute-extended-command)
         :n "gj" #'evil-next-visual-line
         :n "gk" #'evil-previous-visual-line)
 
@@ -75,12 +74,13 @@
   (scroll-on-jump-advice-add better-jumper-jump-backward))
 
 ;; Japanese
-;; TODO: Find the record file
-;; TODO: Find an easy way to quit
-(after! japanese
-  (map! "C-x C-j" #'skk-mode)
+(after! skk
   (setq skk-large-jisyo "~/.local/share/skk/SKK-JISYO.L"
-        skk-record-file "~/.local/share/skk/SKK-RECORD"))
+        skk-record-file "~/.local/share/skk/SKK-RECORD")
+  (remove-hook 'doom-escape-hook 'skk-mode-exit))
+
+(after! japanese
+  (remove-hook 'text-mode-hook 'pangu-spacing-mode))
 
 ;; LSP
 (after! lsp-mode
@@ -139,23 +139,22 @@
 (after! flycheck
   (setq flycheck-global-modes '(not org-mode))
   (map! :leader
-        (:prefix-map ("c" . "code")
-         :desc "Next error"     "n" #'flycheck-next-error
-         :desc "Previous error" "p" #'flycheck-previous-error)))
+        :prefix ("c" . "code")
+        :desc "Next error"     "n" #'flycheck-next-error
+        :desc "Previous error" "p" #'flycheck-previous-error))
 
 (after! ranger
   (add-hook! ranger-mode #'hide-mode-line-mode)
   (map! :map ranger-mode-map
-        (:prefix-map ("c")
-         :desc "Create file"           "f" #'dired-create-empty-file
-         :desc "Create directory"      "d" #'dired-create-directory))
+        :desc "Create file"      "cf" #'dired-create-empty-file
+        :desc "Create directory" "cd" #'dired-create-directory)
   (setq ranger-show-hidden t
         ranger-modify-header nil))
 
 (after! dired
   (map! :leader
-        (:prefix-map ("f" . "file")
-         :desc "Open current directory" "o" #'dired-jump)))
+        :prefix ("f" . "file")
+        :desc "Open current directory" "o" #'dired-jump))
 
 ;; DOOG
 (setq fancy-splash-image "~/.doom.d/doog2.png")

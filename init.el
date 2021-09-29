@@ -1,10 +1,5 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; This doesn't disable pangu-spacing
-(use-package-hook! pangu-spacing
-  :pre-init
-  nil)
-
 (doom! :input
        ;;chinese
        japanese
