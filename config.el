@@ -51,9 +51,9 @@
         scroll-on-jump-smooth nil))
 
 (after! evil
-  (map! :leader
-        :desc "M-x" "SPC" #'execute-extended-command)
-  (map! :n "gj" #'evil-next-visual-line
+  (map! (:leader
+         :desc "M-x" "SPC" #'execute-extended-command)
+        :n "gj" #'evil-next-visual-line
         :n "gk" #'evil-previous-visual-line)
 
   (scroll-on-jump-advice-add evil-jump-item)
@@ -138,23 +138,22 @@
 (after! flycheck
   (setq flycheck-global-modes '(not org-mode))
   (map! :leader
-        (:prefix-map ("c" . "code")
-         :desc "Next error"     "n" #'flycheck-next-error
-         :desc "Previous error" "p" #'flycheck-previous-error)))
+        :prefix ("c" . "code")
+        :desc "Next error"     "n" #'flycheck-next-error
+        :desc "Previous error" "p" #'flycheck-previous-error))
 
 (after! ranger
   (add-hook! ranger-mode #'hide-mode-line-mode)
   (map! :map ranger-mode-map
-        (:prefix-map ("c")
-         :desc "Create file"           "f" #'dired-create-empty-file
-         :desc "Create directory"      "d" #'dired-create-directory))
+        :desc "Create file"      "cf" #'dired-create-empty-file
+        :desc "Create directory" "cd" #'dired-create-directory)
   (setq ranger-show-hidden t
         ranger-modify-header nil))
 
 (after! dired
   (map! :leader
-        (:prefix-map ("f" . "file")
-         :desc "Open current directory" "o" #'dired-jump)))
+        :prefix ("f" . "file")
+        :desc "Open current directory" "o" #'dired-jump))
 
 ;; DOOG
 (setq fancy-splash-image "~/.doom.d/doog2.png")
