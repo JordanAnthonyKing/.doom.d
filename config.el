@@ -52,10 +52,7 @@
 
 (after! evil
   (map! :leader
-        :desc "M-x" "SPC" #'execute-extended-command
-        :n "gj" #'evil-next-visual-line
-        :n "gk" #'evil-previous-visual-line)
-
+        :desc "M-x" "SPC" #'execute-extended-command)
   (map! :n "gj" #'evil-next-visual-line
         :n "gk" #'evil-previous-visual-line)
 
@@ -77,12 +74,12 @@
   (scroll-on-jump-advice-add better-jumper-jump-backward))
 
 ;; Japanese
-;; TODO: Find the record file
-;; TODO: Find an easy way to quit
-(after! japanese
-  (map! "C-x C-j" #'skk-mode)
+(after! skk
   (setq skk-large-jisyo "~/.local/share/skk/SKK-JISYO.L"
         skk-record-file "~/.local/share/skk/SKK-RECORD")
+  (remove-hook 'doom-escape-hook 'skk-mode-exit))
+
+(after! japanese
   (remove-hook 'text-mode-hook 'pangu-spacing-mode))
 
 ;; LSP
