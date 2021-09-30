@@ -13,8 +13,8 @@
 ; (setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
 ; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
 ; (setq doom-variable-pitch-font (font-spec :family "M+ 2c" :size 30 :weight 'light))
-(setq doom-font (font-spec :family "Source Han Code JP" :size 16 :weight 'regular))
-(setq doom-unicode-font (font-spec :family "Source Han Code JP" :size 16 :weight 'regular))
+(setq doom-font (font-spec :family "Source Han Code JP" :size 24 :weight 'regular))
+(setq doom-unicode-font (font-spec :family "Source Han Code JP" :size 24 :weight 'regular))
 
 (setq doom-theme 'doom-one)
 (setq org-directory "~/documents/org/")
@@ -37,10 +37,10 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-; (load! "snips.el")
+(load! "snips.el")
 (load! "org.el")
 
-;; Scrolling
+;; Scrolling and EVIL
 (setq
  scroll-margin 3
  mouse-wheel-scroll-amount '(1 ((shift) . hscroll)))
@@ -54,7 +54,9 @@
   (map! (:leader
          :desc "M-x" "SPC" #'execute-extended-command)
         :n "gj" #'evil-next-visual-line
-        :n "gk" #'evil-previous-visual-line)
+        :n "gk" #'evil-previous-visual-line
+        :n "C-a" #'evil-end-of-line
+        :n "C-i" #'doom/backward-to-bol-or-indent)
 
   (scroll-on-jump-advice-add evil-jump-item)
   (scroll-on-jump-advice-add evil-ex-search-previous)
@@ -93,57 +95,56 @@
 
 ;; LSP
 (after! lsp-mode
- (setq lsp-clients-typescript-plugins
+ (add-hook! lsp-completion-mode
+  (setq-local +lsp-company-backends '(company-capf)))
+ (map! :leader
+       :prefix ("c" . "code")
+       :desc "Restart workspace" "R" #'lsp-restart-workspace)
+ (setq lsp-auto-execute-action nil
+       lsp-modeline-diagnostics-enable nil
+       lsp-modeline-code-actions-enable nil
+       lsp-modeline-workspace-status-enable nil
+       lsp-headerline-breadcrumb-enable nil
+       lsp-clients-typescript-plugins
        (vector (list
         :name "@vsintellicode/typescript-intellicode-plugin"
         :location "/home/jordan/.vscode/extensions/visualstudioexptteam.vscodeintellicode-1.2.13/"))))
 
-;(after! lsp-mode
-  ; (add-hook! lsp-completion-mode
-    ; (setq-local +lsp-company-backends '(company-capf)))
-  ; ; (add-hook! css-mode-hook #'(lsp-headerline-breadcrumb-mode))
-  ; (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
-  ; (setq ; lsp-auto-execute-action nil
-        ; ; lsp-signature-auto-activate nil
-        ; ; lsp-signature-render-documentation nil
-        ; ; lsp-modeline-diagnostics-enable nil
-        ; ; lsp-modeline-code-actions-enable nil
-        ; ; lsp-imenu-sort-methods '(position)
-        ; ; lsp-clients-typescript-log-verbosity "debug"
-        ; lsp-headerline-breadcrumb-segments '(file symbols)
-        ; ; lsp-headerline-breadcrumb-enable t
-        ; lsp-headerline-breadcrumb-icons-enable t
-        ; lsp-clients-typescript-plugins (vector
-                                        ; (list
-                                        ; :name "@vsintellicode/typescript-intellicode-plugin"
-                                        ; :location "/home/jordan/.vscode/extensions/visualstudioexptteam.vscodeintellicode-1.2.13/"))))
-;
-; ; (after! lsp-ui
-; ; (setq lsp-ui-sideline-actions-icon nil
-; ; lsp-ui-sideline-diagnostic-max-lines 5))
-;
-; (add-hook! '(css-mode-local-vars-hook
-             ; scss-mode-local-vars-hook
-             ; sass-mode-local-vars-hook
-             ; less-css-mode-local-vars-hook)
-             ; #'lsp-headerline-breadcrumb-mode)
+(after! lsp-ui
+ (setq lsp-ui-sideline-show-code-actions nil))
+
+;; JS et al
+(after! javascript
+  (setq-default typescript-indent-level 2))
 
 ;; Modeline
-; (after! doom-modeline
-  ; (setq doom-modeline-buffer-file-name-style 'file-name
-        ; doom-modeline-buffer-encoding nil
-        ; doom-modeline-vcs-max-length 18
-        ; doom-modeline-buffer-modification-icon nil))
-
 (after! doom-modeline
   (setq doom-modeline-buffer-encoding nil
-        doom-modeline-vcs-max-length 18))
+        doom-modeline-buffer-state-icon nil
+        doom-modeline-checker-simple-format nil
+        doom-modeline-persp-name t
+        doom-modeline-persp-icon nil
+        doom-modeline-vcs-max-length 18)
+
+  (doom-modeline-def-segment buffer-project
+    "Project name"
+    (concat (doom-modeline-spc)
+            (doom-modeline-spc)
+            (propertize (projectile-project-name) 'face 'doom-modeline-persp-name)))
+
+  (doom-modeline-def-modeline 'my-simple-line
+    '(bar modals matches buffer-info-simple buffer-project remote-host word-count parrot)
+    '(objed-state misc-info debug repl lsp major-mode process vcs checker))
+  (defun setup-custom-doom-modeline ()
+    (doom-modeline-set-modeline 'my-simple-line 'default))
+    (add-hook 'doom-modeline-mode-hook 'setup-custom-doom-modeline))
 
 ;; Guides
 (after! highlight-indent-guides
   (setq highlight-indent-guides-character 124
         highlight-indent-guides-responsive 'top))
 
+;; Flycheck
 (after! flycheck
   (setq flycheck-global-modes '(not org-mode))
   (map! :leader
@@ -151,6 +152,11 @@
         :desc "Next error"     "n" #'flycheck-next-error
         :desc "Previous error" "p" #'flycheck-previous-error))
 
+;; Company
+(after! company
+  (plist-put! company-global-modes 'org-mode 'forge-post-mode 'markdown-mode 'text-mode))
+
+;; Dired/Ranger
 (after! ranger
   (add-hook! ranger-mode #'hide-mode-line-mode)
   (map! :map ranger-mode-map
@@ -168,9 +174,6 @@
 (setq fancy-splash-image "~/.doom.d/doog2.png")
 (add-hook! +doom-dashboard-mode
   (setq +doom-dashboard-banner-padding '(2 . 2)))
-
-(after! company
-  (plist-put! company-global-modes 'org-mode 'forge-post-mode 'markdown-mode 'text-mode))
 
 ;; Ivy
 (after! ivy
