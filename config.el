@@ -75,8 +75,17 @@
 
 ;; Japanese
 (after! skk
+  (map! :i "C-q" (cmds! (bound-and-true-p skk-j-mode) #'skk-latin-mode
+                        (bound-and-true-p skk-latin-mode) #'skk-kakutei))
+
   (setq skk-large-jisyo "~/.local/share/skk/SKK-JISYO.L"
-        skk-record-file "~/.local/share/skk/SKK-RECORD")
+        skk-record-file "~/.local/share/skk/SKK-RECORD"
+        skk-status-indicator 'minor-mode)
+
+  (defun my-default-cursor-fn ()
+    (cond ((bound-and-true-p skk-mode) skk-cursor-set)
+          (+evil-default-cursor-fn)))
+  (setq evil-default-cursor 'my-default-cursor-fn)
   (remove-hook 'doom-escape-hook 'skk-mode-exit))
 
 (after! japanese
