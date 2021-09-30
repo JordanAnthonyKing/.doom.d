@@ -40,7 +40,7 @@
 (load! "snips.el")
 (load! "org.el")
 
-;; Scrolling
+;; Scrolling and EVIL
 (setq
  scroll-margin 3
  mouse-wheel-scroll-amount '(1 ((shift) . hscroll)))
@@ -54,7 +54,9 @@
   (map! (:leader
          :desc "M-x" "SPC" #'execute-extended-command)
         :n "gj" #'evil-next-visual-line
-        :n "gk" #'evil-previous-visual-line)
+        :n "gk" #'evil-previous-visual-line
+        :n "C-a" #'evil-end-of-line
+        :n "C-i" #'doom/backward-to-bol-or-indent)
 
   (scroll-on-jump-advice-add evil-jump-item)
   (scroll-on-jump-advice-add evil-ex-search-previous)
@@ -86,6 +88,9 @@
 (after! lsp-mode
  (add-hook! lsp-completion-mode
   (setq-local +lsp-company-backends '(company-capf)))
+ (map! :leader
+       :prefix ("c" . "code")
+       :desc "Restart workspace" "R" #'lsp-restart-workspace)
  (setq lsp-auto-execute-action nil
        lsp-modeline-diagnostics-enable nil
        lsp-modeline-code-actions-enable nil
@@ -97,19 +102,29 @@
         :location "/home/jordan/.vscode/extensions/visualstudioexptteam.vscodeintellicode-1.2.13/"))))
 
 (after! lsp-ui
- (setq lsp-ui-sideline-actions-icon nil))
+ (setq lsp-ui-sideline-show-code-actions nil))
+
+;; JS et al
+(after! javascript
+  (setq-default typescript-indent-level 2))
 
 ;; Modeline
 (after! doom-modeline
-  (setq doom-modeline-buffer-file-name-style 'file-name
-        doom-modeline-buffer-encoding nil
+  (setq doom-modeline-buffer-encoding nil
+        doom-modeline-buffer-state-icon nil
         doom-modeline-checker-simple-format nil
         doom-modeline-persp-name t
         doom-modeline-persp-icon nil
         doom-modeline-vcs-max-length 18)
 
+  (doom-modeline-def-segment buffer-project
+    "Project name"
+    (concat (doom-modeline-spc)
+            (doom-modeline-spc)
+            (propertize (projectile-project-name) 'face 'doom-modeline-persp-name)))
+
   (doom-modeline-def-modeline 'my-simple-line
-    '(bar modals matches buffer-info persp-name remote-host word-count parrot selection-info)
+    '(bar modals matches buffer-info-simple buffer-project remote-host word-count parrot)
     '(objed-state misc-info debug repl lsp major-mode process vcs checker))
   (defun setup-custom-doom-modeline ()
     (doom-modeline-set-modeline 'my-simple-line 'default))
