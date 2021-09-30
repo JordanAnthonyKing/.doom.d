@@ -13,8 +13,8 @@
 ; (setq doom-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
 ; (setq doom-unicode-font (font-spec :family "M+ 2m" :size 30 :weight 'regular))
 ; (setq doom-variable-pitch-font (font-spec :family "M+ 2c" :size 30 :weight 'light))
-(setq doom-font (font-spec :family "Source Han Code JP" :size 24 :weight 'regular))
-(setq doom-unicode-font (font-spec :family "Source Han Code JP" :size 24 :weight 'regular))
+(setq doom-font (font-spec :family "Source Han Code JP" :size 16 :weight 'regular))
+(setq doom-unicode-font (font-spec :family "Source Han Code JP" :size 16 :weight 'regular))
 
 (setq doom-theme 'doom-one)
 (setq org-directory "~/documents/org/")
@@ -37,7 +37,7 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(load! "snips.el")
+; (load! "snips.el")
 (load! "org.el")
 
 ;; Scrolling and EVIL
@@ -85,8 +85,7 @@
         skk-status-indicator 'minor-mode)
 
   (defun my-default-cursor-fn ()
-    (cond ((bound-and-true-p skk-mode) skk-cursor-set)
-          (+evil-default-cursor-fn)))
+    (if (bound-and-true-p skk-mode) skk-cursor-set +evil-default-cursor-fn))
   (setq evil-default-cursor 'my-default-cursor-fn)
   (remove-hook 'doom-escape-hook 'skk-mode-exit))
 
@@ -130,10 +129,30 @@
     "Project name"
     (concat (doom-modeline-spc)
             (doom-modeline-spc)
-            (propertize (projectile-project-name) 'face 'doom-modeline-persp-name)))
+            (propertize (projectile-project-name) 'face 'doom-modeline-persp-name)
+            (doom-modeline-spc)))
+
+  (doom-modeline-def-segment skk
+    "SKK Input State"
+    (when (bound-and-true-p skk-mode)
+           (concat
+            (doom-modeline-spc)
+             (cond ((and skk-j-mode skk-katakana)
+                    (propertize skk-katakana-mode-string 'face '(:inherit mode-line :foreground "green")))
+                   (skk-latin-mode
+                    (propertize skk-latin-mode-string 'face '(:inherit mode-line :foreground "gray")))
+                   (skk-jisx0208-latin-mode
+                    (propertize skk-jisx0208-latin-mode-string 'face '(:inherit mode-line :foreground "gold")))
+                   (skk-abbrev-mode
+                    (propertize skk-abbrev-mode-string 'face '(:inherit mode-line :foreground "royalblue")))
+                   (skk-jisx0201-mode
+                    (propertize skk-jisx0201-mode-string 'face '(:inherit mode-line :foreground "blueviolet")))
+                   (t
+                    (propertize skk-hiragana-mode-string 'face '(:inherit mode-line :foreground "pink"))))
+            (doom-modeline-spc))))
 
   (doom-modeline-def-modeline 'my-simple-line
-    '(bar modals matches buffer-info-simple buffer-project remote-host word-count parrot)
+    '(bar modals matches buffer-info-simple buffer-project remote-host skk word-count parrot)
     '(objed-state misc-info debug repl lsp major-mode process vcs checker))
   (defun setup-custom-doom-modeline ()
     (doom-modeline-set-modeline 'my-simple-line 'default))
@@ -159,10 +178,12 @@
 ;; Dired/Ranger
 (after! ranger
   (add-hook! ranger-mode #'hide-mode-line-mode)
+  (add-hook! ranger-mode (defun hide-cursor-lol () (setq-local cursor-type nil)))
   (map! :map ranger-mode-map
         :desc "Create file"      "cf" #'dired-create-empty-file
         :desc "Create directory" "cd" #'dired-create-directory)
   (setq ranger-show-hidden t
+        ranger-hide-cursor t
         ranger-modify-header nil))
 
 (after! dired
@@ -182,11 +203,11 @@
 
 ;; Icons
 (after! all-the-icons-ivy
-  (add-hook! ivy-mode (setq-local tab-width 2))
-  (add-hook! counsel-mode (setq-local tab-width 2)))
+  (add-hook! ivy-mode (setq-local tab-width 1))
+  (add-hook! counsel-mode (setq-local tab-width 1)))
 
 (after! all-the-icons-dired
-  (add-hook! all-the-icons-dired-mode (setq-local tab-width 2))
+  (add-hook! all-the-icons-dired-mode (setq-local tab-width 1))
   (setq all-the-icons-dired-monochrome nil))
 
 ;; Browser
