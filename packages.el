@@ -46,3 +46,5 @@
 (package! scroll-on-jump
   :recipe (:type git :host gitlab :repo "ideasman42/emacs-scroll-on-jump"))
 (package! valign)
+;; For a bug fix with eslint
+;; (unpin! lsp-mode)

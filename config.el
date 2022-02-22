@@ -104,13 +104,15 @@
        lsp-modeline-code-actions-enable nil
        lsp-modeline-workspace-status-enable nil
        lsp-headerline-breadcrumb-enable nil
+       lsp-eslint-code-action-show-documentation nil
        lsp-clients-typescript-plugins
        (vector (list
         :name "@vsintellicode/typescript-intellicode-plugin"
         :location "/home/jordan/.vscode/extensions/visualstudioexptteam.vscodeintellicode-1.2.13/"))))
 
 (after! lsp-ui
- (setq lsp-ui-sideline-show-code-actions nil))
+ (setq lsp-ui-sideline-show-code-actions nil
+       lsp-ui-sideline-diagnostic-max-lines 10))
 
 ;; JS et al
 (after! javascript
@@ -172,8 +174,8 @@
         :desc "Previous error" "p" #'flycheck-previous-error))
 
 ;; Company
-(after! company
-  (plist-put! company-global-modes 'org-mode 'forge-post-mode 'markdown-mode 'text-mode))
+; (after! company
+  ; (plist-put! company-global-modes 'org-mode 'forge-post-mode 'markdown-mode 'text-mode))
 
 ;; Dired/Ranger
 (after! ranger
